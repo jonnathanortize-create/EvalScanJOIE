@@ -1,0 +1,74 @@
+/* ==========================================================================
+   EvalScan - Diseño Adaptativo y Móvil (responsive.css)
+   Ajustes ergonómicos para pantallas táctiles de docentes, celulares y tablets.
+   ========================================================================== */
+
+/* Dispositivos móviles y pantallas táctiles (anchos <= 768px) */
+@media screen and (max-width: 768px) {
+  /* Contenedor principal con espaciado inferior para barra de navegación flotante o inferior */
+  main#app-viewport {
+    padding-bottom: 80px !important;
+  }
+
+  /* Reducir márgenes laterales en formularios y tarjetas */
+  .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Botones táctiles generosos (mínimo 44px de alto según guías de accesibilidad móvil) */
+  button, 
+  .btn-touch {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  /* Ajustar vista previa de la hoja A4 en móvil para que quepa en pantalla horizontal o con scroll */
+  .sheet-preview-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 0;
+  }
+
+  .evalscan-a4-sheet {
+    transform-origin: top center;
+    width: 800px; /* Mantener proporción interna A4 */
+    max-width: none;
+  }
+
+  /* Cuadrículas que colapsan a una sola columna */
+  .grid-responsive-cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Barra de video de escaneo en móvil */
+  .scanner-camera-box {
+    height: 60vh !important;
+    border-radius: 12px !important;
+  }
+
+  /* Tabla de resultados en móvil: permitir scroll horizontal limpio */
+  .table-responsive-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+}
+
+/* Pantallas extra pequeñas (anchos <= 480px) */
+@media screen and (max-width: 480px) {
+  .app-brand-name {
+    font-size: 16px !important;
+  }
+
+  .stat-card-number {
+    font-size: 20px !important;
+  }
+
+  /* Selector de respuestas en el editor de clave en móvil */
+  .answer-key-q-row {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+}

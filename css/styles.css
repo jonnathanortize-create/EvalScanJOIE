@@ -1,0 +1,343 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   EvalScan - Estilos Globales y de Impresión OMR A4
+   ========================================================================== */
+
+:root {
+  --primary: #1e3a8a;
+  --primary-hover: #172554;
+  --secondary: #0284c7;
+  --accent: #10b981;
+  --surface: #ffffff;
+  --background: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animaciones suaves */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* ==========================================================================
+   HOJA DE RESPUESTAS IMPRIMIBLE A4 Y MARCADORES FIDUCIALES
+   ========================================================================== */
+
+.evalscan-a4-sheet {
+  background: #ffffff;
+  width: 100%;
+  max-width: 800px;
+  min-height: 1100px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  position: relative;
+  box-sizing: border-box;
+  color: #0f172a;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #cbd5e1;
+}
+
+/* 4 Marcadores de esquina fiduciales */
+.fiducial-marker {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  z-index: 10;
+}
+
+.marker-tl { top: 25px; left: 25px; }
+.marker-tr { top: 25px; right: 25px; }
+.marker-bl { bottom: 25px; left: 25px; }
+.marker-br { bottom: 25px; right: 25px; }
+
+.marker-outer {
+  width: 36px;
+  height: 36px;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-inner {
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-core {
+  width: 10px;
+  height: 10px;
+  background-color: #000000;
+}
+
+/* Distintivo asimétrico para la esquina superior izquierda (TL) */
+.tl-core {
+  box-shadow: -4px -4px 0 0 #000000;
+}
+
+/* Barra horizontal de alineación superior */
+.top-orientation-bar {
+  position: absolute;
+  top: 25px;
+  left: 90px;
+  right: 90px;
+  height: 4px;
+  background-color: #000000;
+}
+
+/* Encabezado de la hoja */
+.sheet-header {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.sheet-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.brand-badge {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+}
+
+.brand-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #0284c7;
+}
+
+.eval-metadata {
+  text-align: right;
+}
+
+.eval-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.eval-details {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+/* Recuadro del estudiante */
+.student-fields-box {
+  border: 1.5px solid #0f172a;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  background-color: #f8fafc;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.field-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field-col {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #1e293b;
+  white-space: nowrap;
+}
+
+.field-line {
+  flex: 1;
+  border-bottom: 1px dotted #334155;
+  height: 16px;
+}
+
+.sheet-instructions {
+  font-size: 10px;
+  color: #475569;
+  line-height: 1.4;
+  background-color: #f1f5f9;
+  padding: 6px 10px;
+  border-left: 3px solid #0284c7;
+  margin-bottom: 18px;
+}
+
+/* Cuadrícula de columnas OMR */
+.sheet-grid-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.omr-column {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 6px 8px;
+  background: #ffffff;
+}
+
+.omr-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #475569;
+  border-bottom: 1px solid #94a3b8;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.hdr-num { width: 24px; text-align: center; }
+.hdr-opts { flex: 1; text-align: center; letter-spacing: 2px; }
+
+.omr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.omr-q-num {
+  width: 24px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: right;
+  padding-right: 6px;
+}
+
+.omr-bubbles-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1;
+}
+
+.omr-bubble {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.bubble-letter {
+  font-size: 10px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1;
+}
+
+/* Pie de la hoja */
+.sheet-footer {
+  position: absolute;
+  bottom: 25px;
+  left: 90px;
+  right: 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: #64748b;
+  border-top: 1px solid #cbd5e1;
+  padding-top: 6px;
+}
+
+/* ==========================================================================
+   ESTILOS DE IMPRESIÓN (@media print)
+   ========================================================================== */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Ocultar elementos no imprimibles de la aplicación */
+  header.app-header,
+  nav,
+  aside,
+  button,
+  .no-print,
+  #toast-container,
+  .app-navigation,
+  .print-controls-bar {
+    display: none !important;
+  }
+
+  .evalscan-a4-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 10px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Forzar impresión de colores de fondo y bordes exactos */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

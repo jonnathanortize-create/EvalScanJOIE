@@ -1,0 +1,38 @@
+{
+  "id": "/",
+  "name": "EvalScan - Evaluaciones y Calificación OMR",
+  "short_name": "EvalScan",
+  "description": "Aplicación offline-first para crear, escanear y calificar exámenes con reconocimiento de marcas ópticas (OMR).",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#1e3a8a",
+  "background_color": "#f8fafc",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

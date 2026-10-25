@@ -1,0 +1,10 @@
+{
+  "name": "EvalScan",
+  "description": "Aplicación modular, confiable y offline-first para crear evaluaciones de opción múltiple, generar hojas de respuestas imprimibles, escanear hojas con OMR y calificar automáticamente.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

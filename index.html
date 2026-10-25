@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>EvalScan</title>
+    <meta name="description" content="Aplicación modular, confiable y offline-first para crear evaluaciones de opción múltiple, generar hojas de respuestas imprimibles, escanear hojas con OMR y calificar automáticamente." />
+    <meta property="og:title" content="EvalScan" />
+    <meta property="og:description" content="Aplicación modular, confiable y offline-first para crear evaluaciones de opción múltiple, generar hojas de respuestas imprimibles, escanear hojas con OMR y calificar automáticamente." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- PWA y soporte móvil -->
+    <meta name="theme-color" content="#1e3a8a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="EvalScan" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+    <!-- Banner de modo sin conexión (Offline Indicator) -->
+    <div id="offline-indicator-banner" class="hidden bg-amber-500 text-amber-950 px-4 py-2 text-xs font-bold text-center border-b border-amber-600 no-print flex items-center justify-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+      Modo Sin Conexión — EvalScan está funcionando localmente desde la memoria caché.
+    </div>
+
+    <!-- Encabezado de la aplicación y barra de navegación -->
+    <header class="app-header bg-blue-900 text-white shadow-md sticky top-0 z-40 no-print">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo y Marca -->
+          <div class="flex items-center gap-3 cursor-pointer" data-nav-target="inicio">
+            <div class="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white shadow-md font-black text-xl tracking-tighter">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="4" y="3" width="16" height="18" rx="2" stroke-width="2"/>
+                <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+                <circle cx="12" cy="8" r="1.5" stroke-width="1.5"/>
+                <circle cx="16" cy="8" r="1.5" stroke-width="1.5"/>
+                <circle cx="8" cy="12" r="1.5" stroke-width="1.5"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                <circle cx="16" cy="12" r="1.5" stroke-width="1.5"/>
+                <path d="M7 16h10" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <span class="app-brand-name text-lg font-black tracking-tight text-white block leading-none">EvalScan</span>
+              <span class="text-[10px] font-bold text-sky-300 uppercase tracking-widest leading-tight">OMR Offline</span>
+            </div>
+          </div>
+
+          <!-- Navegación de Escritorio -->
+          <nav class="hidden md:flex items-center gap-1 app-navigation" aria-label="Navegación principal">
+            <button data-nav-target="inicio" class="px-3.5 py-2 rounded-xl text-xs font-bold text-white transition cursor-pointer">
+              Inicio
+            </button>
+            <button data-nav-target="evaluaciones" class="px-3.5 py-2 rounded-xl text-xs font-bold text-blue-100 hover:bg-blue-700/60 transition cursor-pointer">
+              Evaluaciones
+            </button>
+            <button data-nav-target="crear-evaluacion" class="px-3.5 py-2 rounded-xl text-xs font-bold text-blue-100 hover:bg-blue-700/60 transition cursor-pointer">
+              Crear evaluación
+            </button>
+            <button data-nav-target="escanear" class="px-3.5 py-2 rounded-xl text-xs font-bold text-blue-100 hover:bg-blue-700/60 transition cursor-pointer">
+              Escanear respuestas
+            </button>
+            <button data-nav-target="resultados" class="px-3.5 py-2 rounded-xl text-xs font-bold text-blue-100 hover:bg-blue-700/60 transition cursor-pointer">
+              Resultados
+            </button>
+            <button data-nav-target="configuracion" class="px-3.5 py-2 rounded-xl text-xs font-bold text-blue-100 hover:bg-blue-700/60 transition cursor-pointer">
+              Configuración
+            </button>
+          </nav>
+
+          <!-- Acciones de cabecera: botón de instalación PWA y menú móvil -->
+          <div class="flex items-center gap-2">
+            <button id="btn-pwa-install" class="hidden items-center gap-1.5 px-3 py-1.5 bg-sky-500 hover:bg-sky-400 text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Instalar App</span>
+            </button>
+
+            <!-- Botón de menú hamburguesa móvil -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-blue-200 hover:text-white hover:bg-blue-800 rounded-xl transition cursor-pointer" aria-label="Abrir menú">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menú desplegable para móviles -->
+      <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-blue-800 bg-blue-950 px-4 py-3 space-y-1">
+        <button data-nav-target="inicio" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-white hover:bg-blue-800 transition cursor-pointer">
+          Inicio
+        </button>
+        <button data-nav-target="evaluaciones" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-blue-100 hover:bg-blue-800 transition cursor-pointer">
+          Evaluaciones
+        </button>
+        <button data-nav-target="crear-evaluacion" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-blue-100 hover:bg-blue-800 transition cursor-pointer">
+          Crear evaluación
+        </button>
+        <button data-nav-target="escanear" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-blue-100 hover:bg-blue-800 transition cursor-pointer">
+          Escanear respuestas
+        </button>
+        <button data-nav-target="resultados" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-blue-100 hover:bg-blue-800 transition cursor-pointer">
+          Resultados
+        </button>
+        <button data-nav-target="configuracion" class="w-full text-left px-3 py-2.5 rounded-xl text-sm font-bold text-blue-100 hover:bg-blue-800 transition cursor-pointer">
+          Configuración
+        </button>
+      </div>
+    </header>
+
+    <!-- Contenedor del Viewport dinámico principal -->
+    <main id="app-viewport" class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8" role="main">
+      <!-- Vistas renderizadas por app.js -->
+    </main>
+
+    <!-- Pie de página de la aplicación -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 no-print mt-auto">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div>
+          <strong>EvalScan</strong> • Sistema OMR de Evaluación Educativa Offline
+        </div>
+        <div class="text-[11px] text-slate-400">
+          Almacenamiento seguro en IndexedDB • Sin conexión externa requerida
+        </div>
+      </div>
+    </footer>
+
+    <!-- Contenedor para notificaciones Toast -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 no-print"></div>
+
+    <!-- Módulo principal vanilla ES -->
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
