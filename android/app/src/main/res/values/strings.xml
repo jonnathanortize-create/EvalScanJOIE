@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EvalScan</string>
+    <string name="title_activity_main">EvalScan</string>
+    <string name="package_name">com.evalscan.app</string>
+    <string name="custom_url_scheme">com.evalscan.app</string>
+</resources>

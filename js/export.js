@@ -165,9 +165,17 @@ export function openPrintableResultsReport(evaluation, results) {
     `;
   });
 
-  const printWindow = window.open('', '_blank');
+  // Intentar abrir en ventana emergente (desktop) o modal accesible (Android WebView / móvil)
+  let printWindow = null;
+  try {
+    printWindow = window.open('', '_blank');
+  } catch {
+    printWindow = null;
+  }
+
   if (!printWindow) {
-    showToast('El navegador bloqueó la ventana emergente de impresión. Por favor habilítela.', 'warning');
+    // Modo Android WebView / Móvil: renderizar modal de reporte imprimible directamente en el DOM
+    showInAppPrintableModal(evaluation, results, stats, rowsHtml);
     return;
   }
 
@@ -259,6 +267,65 @@ export function openPrintableResultsReport(evaluation, results) {
     </html>
   `);
   printWindow.document.close();
+}
+
+function showInAppPrintableModal(evaluation, results, stats, rowsHtml) {
+  const existing = document.getElementById('in-app-printable-modal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'in-app-printable-modal';
+  overlay.className = 'fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex flex-col p-4 sm:p-6 overflow-y-auto animate-fade-in';
+
+  overlay.innerHTML = `
+    <div class="bg-white rounded-2xl max-w-4xl w-full mx-auto p-6 sm:p-8 shadow-2xl flex flex-col gap-4 text-slate-800 my-auto">
+      <div class="flex items-center justify-between border-b pb-3 no-print">
+        <h3 class="font-bold text-lg text-slate-900">Reporte de Calificaciones Oficial</h3>
+        <div class="flex gap-2">
+          <button id="modal-print-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition cursor-pointer">
+            Imprimir
+          </button>
+          <button id="modal-close-btn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer">
+            Cerrar
+          </button>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">EvalScan — ${escapeHtml(evaluation.name)}</h2>
+        <p class="text-xs text-slate-500">${evaluation.subject ? `Materia: ${escapeHtml(evaluation.subject)} • ` : ''}${evaluation.course ? `Curso: ${escapeHtml(evaluation.course)} • ` : ''}Fecha: ${formatDate(new Date().toISOString(), true)}</p>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+        <div class="p-2.5 bg-slate-50 border rounded-xl"><div class="font-bold text-base text-blue-700">${stats.count}</div><div>Estudiantes</div></div>
+        <div class="p-2.5 bg-slate-50 border rounded-xl"><div class="font-bold text-base text-blue-700">${formatNumber(stats.averageScore)}</div><div>Promedio</div></div>
+        <div class="p-2.5 bg-slate-50 border rounded-xl"><div class="font-bold text-base text-emerald-700">${formatPercentage(stats.passRate)}</div><div>Aprobación</div></div>
+        <div class="p-2.5 bg-slate-50 border rounded-xl"><div class="font-bold text-base text-slate-800">${formatNumber(stats.maxScore)} | ${formatNumber(stats.minScore)}</div><div>Máx / Mín</div></div>
+      </div>
+      <div class="overflow-x-auto max-h-96">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 border-b">
+              <th class="p-2 text-center">#</th>
+              <th class="p-2">Estudiante</th>
+              <th class="p-2">Identificación</th>
+              <th class="p-2 text-center">Aciertos</th>
+              <th class="p-2 text-center">Errores</th>
+              <th class="p-2 text-center">Blanco</th>
+              <th class="p-2 text-center">%</th>
+              <th class="p-2 text-center">Nota</th>
+              <th class="p-2 text-center">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml || '<tr><td colspan="9" class="p-4 text-center">No hay registros calificados.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  overlay.querySelector('#modal-close-btn').addEventListener('click', () => overlay.remove());
+  overlay.querySelector('#modal-print-btn').addEventListener('click', () => window.print());
 }
 
 function escapeHtml(str) {
